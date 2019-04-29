@@ -1,43 +1,43 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { 
+    StyleSheet, 
+    View, 
+    TouchableHighlight 
+} from 'react-native';
 
 class Blink extends React.Component {
-    constructor() {
-        super();
-
-        this.state = {
-            visible: true
-        }
-
-        // Toggle the state every second
-        setInterval(() => (
-            this.setState(previousState => (
-            { visible: !previousState.visible }
-            ))
-        ), 1000);
+    constructor(props) {
+        super(props);
     }
 
     render() {
-        const { visible } = this.state; 
-        
-        if(visible) {
-            return(
-                <View style={styles.container}>
-                    <Text>Hello! Welcome to React Native</Text>
-                </View>
-            );
-        }
-        return null;
+        const {left, top} = this.props;
+        return(
+            <View>
+                <TouchableHighlight>
+                    <View 
+                        style={{
+                            ...styles.tab,
+                            position: "absolute",
+                            left,
+                            top
+                        }}
+                    />
+                </TouchableHighlight>
+            </View>
+        );
     }
         
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
+    tab: {
+      backgroundColor: 'powderblue',
+      minWidth: 100,
+      minHeight: 100
+    },
+    button: {
+        
     }
   });
 
