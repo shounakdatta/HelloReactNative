@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import Blink from './src/components/Blink';
+import Tab from './src/components/Tab';
 
 class Grid extends React.Component {
     container() {
@@ -16,7 +16,7 @@ class Grid extends React.Component {
         const {tabX, tabY} = this.state;
         return (
             <View style={styles.container}>
-                <Blink left={tabX} top={tabY}/>
+                <Tab left={tabX} top={tabY}/>
             </View>
         );
     }
