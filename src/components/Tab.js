@@ -1,8 +1,8 @@
 import React from 'react';
-import { 
-    StyleSheet, 
-    View, 
-    TouchableHighlight 
+import {
+    StyleSheet,
+    View,
+    TouchableHighlight
 } from 'react-native';
 
 class Tab extends React.Component {
@@ -11,42 +11,43 @@ class Tab extends React.Component {
     }
 
     handleTabTapLocal() {
-        this.props.handleTabTap();
+        this.props.handleTabTap(100);
     }
 
     render() {
-        const {left, top} = this.props;
-        return(
+        const { left, top } = this.props;
+        return (
             <View>
                 <TouchableHighlight
-                    style={{...styles.button, left, top}}
+                    style={{ ...styles.button, left, top }}
                     onPress={() => this.handleTabTapLocal()}
+                    underlayColor={'#FFF'}
                 >
-                    <View 
+                    <View
                         style={styles.tab}
                     />
                 </TouchableHighlight>
             </View>
         );
     }
-        
+
 }
 
 const styles = StyleSheet.create({
     tab: {
-      backgroundColor: 'powderblue',
-      width: 100,
-      height: 100
+        backgroundColor: 'powderblue',
+        width: 100,
+        height: 100
     },
     button: {
-      position: "absolute",
-      flex: 1,
-      alignItems: "center",
-      justifyContent: "center",
-      backgroundColor: 'orange',
-      width: 125,
-      height: 125
+        position: "absolute",
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: '#FFF',
+        width: 125,
+        height: 125
     }
-  });
+});
 
 export default Tab;
