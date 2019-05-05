@@ -3,7 +3,9 @@ import {
   StyleSheet,
   TouchableHighlight,
   View,
-  Dimensions
+  Dimensions,
+  Button,
+  ToastAndroid
 } from 'react-native';
 import { Title } from 'react-native-paper';
 import Tab from './src/components/Tab';
@@ -12,14 +14,14 @@ export default class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      points: 100,
-      highscore: 100,
+      points: 0,
+      highscore: 0,
       left: 0,
       top: 0,
       width: Math.round(Dimensions.get('window').width - 125),
       height: Math.round(Dimensions.get('window').height * 0.6 - 125),
       pointColor: 'black',
-      liveTime: 10000,
+      liveTime: 1000,
       lastReset: new Date()
     }
   }
@@ -30,23 +32,33 @@ export default class App extends React.Component {
       const now = new Date();
       const diff = now.getTime() - lastReset.getTime();
       if (diff > liveTime) {
-        this.setState({
-          lastReset: now
-        }, () => {
-          this.resetTab(-100);
-        });
+        this.resetTab(-100);
       }
     }, 1000)
   }
 
   adjustLiveTime() {
     const { points, liveTime } = this.state;
-    const adjTime = 10000 - Math.floor(points / 1000) * 1000
+    let adjTime = 1000;
+    for (let i = 0; i < Math.floor(points / 500); i++) {
+      adjTime -= adjTime * 0.1;
+    }
     if (adjTime != liveTime) {
+      this.showToast(adjTime);
       this.setState({
         liveTime: adjTime
       });
     }
+  }
+
+  showToast(adjTime) {
+    const { liveTime } = this.state;
+    const text = adjTime > liveTime ?
+      "Slowing Down..." : "Speeding Up"
+    ToastAndroid.show(
+      text,
+      ToastAndroid.SHORT,
+    );
   }
 
   getRandLeft() {
@@ -75,6 +87,8 @@ export default class App extends React.Component {
   resetTab(diff) {
     let { highscore, points } = this.state;
     const pointColor = diff > 0 ? 'green' : 'red';
+    if (points === 0 && diff < 0) return;
+
     highscore = (diff > 0 && highscore <= points) ?
       points + diff : highscore;
     left = this.getRandLeft();
@@ -86,9 +100,17 @@ export default class App extends React.Component {
         points: prevState.points + diff,
         pointColor,
         highscore,
+        lastReset: new Date()
       }
     });
     this.adjustLiveTime();
+  }
+
+  resetPoints() {
+    this.setState({
+      points: 0,
+      pointColor: 'black'
+    })
   }
 
   render() {
@@ -110,6 +132,17 @@ export default class App extends React.Component {
             />
           </View>
         </TouchableHighlight>
+        <View style={styles.bottom}>
+          <TouchableHighlight
+            onPress={() => this.reset()}
+          >
+            <Button
+              onPress={this.resetPoints.bind(this)}
+              title="RESET"
+              color="#841584"
+            />
+          </TouchableHighlight>
+        </View>
         <View style={styles.bottom}>
           <Title style={{ color: pointColor }}>Points: {points}</Title>
           <Title>High Score: {highscore}</Title>
